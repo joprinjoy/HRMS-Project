@@ -46,7 +46,7 @@ class Leave(Base):
   __table_args__= (UniqueConstraint('employee_id'),)
   id : Mapped[int] = mapped_column(primary_key=True)
   employee_id : Mapped[int] = mapped_column(ForeignKey('employee.id'))
-  leave_taken : Mapped[int] = mapped_column()
+  leave_taken : Mapped[int] = mapped_column(default=0)
   employees : Mapped["Employee"] = relationship("Employee",back_populates='leave')
 
 class Credential(Base):

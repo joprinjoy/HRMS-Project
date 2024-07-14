@@ -1,6 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { EmployeeData } from "../../store/getEmployee"
+import { DesignationData } from "../../store/getDesignation"
+
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,16 +12,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import UpdateEmployee from "./UpdateEmployee";
+import ViewDetails from "../ViewDetails";
+// import {GetEmployee} from "./getEmployeeData"
+
 
 const ViewEmployee = ()=>{
 
+  // const {loading, error, data} = GetEmployee()
+  // console.log(data, error, loading, "apicall");
 
+    const [openUpdateEmployee,setopenUpdateEmployee] = useState(false)
+    const [openEmployeeView,setOpenEmployeeView] = useState(false)
+    const [employeeId,setEmployeeId] = useState(null)
+   
     const dispatch = useDispatch()
     const employeeDatas = useSelector((state)=> state.employee.data)
-    console.log(employeeDatas,"employeedata.jsx")
+
 
     useEffect (()=>{
         dispatch(EmployeeData())
+        dispatch(DesignationData())
+        
+
     },[dispatch])
 
 
@@ -26,10 +46,27 @@ const ViewEmployee = ()=>{
         [`&.${tableCellClasses.head}`]: {
           backgroundColor: theme.palette.common.black,
           color: theme.palette.common.white,
+          fontSize:18
         },
         [`&.${tableCellClasses.body}`]: {
-          fontSize: 14,
+          fontSize: 18,
         },
+          [`& .hover-button`]: {
+          
+          background: 'none',
+          border: 'none',
+          color : 'inherit',
+          padding: 0,
+          font: 'inherit',
+          cursor: 'pointer',
+          textDecoration: 'none',
+        },
+        [`& .hover-button:hover`]: {
+          textDecoration: 'none',
+          color : 'blue',
+        },
+        
+         
       }));
       
       const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -42,13 +79,39 @@ const ViewEmployee = ()=>{
         },
       }));
       
-      function createData(name, calories, fat, carbs, protein) {
-        return { name, calories, fat, carbs, protein };
+      const handleCloseUpdateEmployee = ()=>{
+          setopenUpdateEmployee(false)
+          dispatch(EmployeeData())
       }
 
+
+      const handleDelete = (id)=>{
+        console.log(id,"delete")
+   
+     }
+  
+  
+     const handleUpdate = (id)=>{
+        setEmployeeId(id)
+
+        setopenUpdateEmployee(true)   
+      } 
+
+   const handleOpenView = (id)=>{
+      setEmployeeId(id)
+      
+
+      setOpenEmployeeView(true)
+   }
+
+   const handleCloseView = ()=>{
+    
+      setOpenEmployeeView(false)
+   }
+   
+
     return(
-        <>
-       
+        <> 
 
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700,  }} aria-label="customized table">
@@ -60,6 +123,8 @@ const ViewEmployee = ()=>{
             <StyledTableCell align="center">Designation</StyledTableCell>
             <StyledTableCell align="center">Phone</StyledTableCell>
             <StyledTableCell align="center">Email</StyledTableCell>
+            <StyledTableCell align="center">Leave Status</StyledTableCell>
+            <StyledTableCell align="center">Actions</StyledTableCell>
             
 
 
@@ -68,21 +133,52 @@ const ViewEmployee = ()=>{
         <TableBody>
           {employeeDatas.map((item,index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell component="th" scope="row">
+              <StyledTableCell align="center" component="th" scope="row">
                 {index+1}
               </StyledTableCell>
-              <StyledTableCell align="right">{item.id}</StyledTableCell>
-              <StyledTableCell align="right">{item.first_name}</StyledTableCell>
-              <StyledTableCell align="right">{item.designation}</StyledTableCell>
-              <StyledTableCell align="right">{item.phone}</StyledTableCell>
-              <StyledTableCell align="right">{item.email}</StyledTableCell>
+              <StyledTableCell align="center">{item.id}</StyledTableCell>
+              <StyledTableCell align="center"><Button onClick={()=>{handleOpenView(item.id)}} className="hover-button">{item.first_name +" "+ item.last_name}</Button></StyledTableCell>
+              <StyledTableCell align="center">{item.designation}</StyledTableCell>
+              <StyledTableCell align="center">{item.phone}</StyledTableCell>
+              <StyledTableCell align="center">{item.email}</StyledTableCell>
+              
+              <StyledTableCell align="center">{item.leaves_taken !== null ? item.leaves_taken : 0}/{item.leaves_allotted}</StyledTableCell>
 
+
+              <StyledTableCell align="center">
+
+                <ButtonGroup variant="text" aria-label="Basic button group" >                                 
+                  <Button title="Edit Row"  onClick={()=>{handleUpdate(item.id)}}>
+                    <ModeEditOutlineIcon fontSize="large" sx={{ color: 'rgb(78, 77, 78)' }} />
+                  </Button>
+                          
+                  <Button title="Delete Row" onClick={()=>handleDelete(item.id)} >
+                    <DeleteIcon  fontSize="large" sx={{ color: 'rgb(182, 67, 67)'  }} />
+                  </Button>
+                </ButtonGroup>
+
+                
+              </StyledTableCell>
+              
             </StyledTableRow>
           ))}
+          
         </TableBody>
       </Table>
     </TableContainer>
 
+    <UpdateEmployee
+                    open={openUpdateEmployee}
+                    empId = {employeeId}
+                    handleClose = {handleCloseUpdateEmployee }
+                    
+                    />
+                    <ViewDetails
+                    open={openEmployeeView}
+                    empId = {employeeId}
+                    handleClose = {handleCloseView}
+                    
+                    />
 
         </>
     )

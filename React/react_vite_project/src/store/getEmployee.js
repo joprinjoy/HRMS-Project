@@ -7,15 +7,19 @@ const initialState = {
     data:[]
 }
 
+
+
 export const EmployeeData = createAsyncThunk(
     'employeedatagetter',
     async()=>{
         const response = await getEmployeeData();
-            console.log(response,"response")
             return response;
         
     }
 )
+
+
+
 
 export const EmployeeDataSlice = createSlice({
 
@@ -38,5 +42,7 @@ export const EmployeeDataSlice = createSlice({
         })
     }
 })
+
+
 
 export default EmployeeDataSlice.reducer

@@ -21,25 +21,25 @@ def index():
    return "Hello all I am HR Management System"
 
 @app.route("/login",methods = ['POST','GET'])   
+@cross_origin()
 def login():
     data = request.get_json()
-    
-    username = data.get('username')
+    breakpoint()
+    uname = data.get('username')
     password = data.get('password')
-    credential = db.session.query(Credential).filter_by(username=username).first()   
-    if credential == None:
-            # usname = request.cookies.get('username')
-            # pswd = request.cookies.get('password')  
-        return jsonify({"error": "Username not found"}), 400
-    if username == credential.username and password == credential._password:
+    credential = db.session.query(Credential).filter_by(username=uname).first()   
+    if credential == None: 
+        return jsonify({"message": "Username not found"}), 400  
+    if uname == credential.username and password == credential._password:
         session['user'] = credential.username
         print(session['user'])
-        return jsonify({"message": 'Login Successful'}),200
+        return jsonify({"message": 'Login Successful',"user":session['user']}),200
                           
     else:
-        return jsonify({"error": "Password error"}), 400  
+        return jsonify({"message": "Password error"}), 400  
 
 @app.route('/addemployee',methods = ['POST'])
+@cross_origin()
 def addEmployee():
     data = request.get_json()
     first_name = data.get('first_name')
@@ -54,6 +54,7 @@ def addEmployee():
     employee = Employee(first_name=first_name,last_name=last_name,address=address,phone=phone,email = email,designation_id = designation.id)
     db.session.add(employee)
     db.session.commit()
+    
     return jsonify({"message": 'Employee added Successfully'}),200
 
 @app.route('/employee')
@@ -69,7 +70,7 @@ def getEmployee():
                                     Designation.leaves_allotted
                                     ,Leave.leave_taken).outerjoin(Designation,Employee.designation_id==Designation.id).outerjoin(Leave,Leave.employee_id==Employee.id)
     get_employee = db.session.execute(select_query).fetchall()
-    print(get_employee)
+    
 
     employee_data =[]
 
@@ -91,10 +92,12 @@ def getEmployee():
     return jsonify(employee_data)
 
 @app.route('/updateemployee/<int:id>' ,methods=['PUT'])
+@cross_origin()
 def editEmployee(id):
     
     employee =db.session.query(Employee).filter_by(id= id).first()
     data = request.get_json()
+    
     leaves_taken = data.get('leaves_taken')
     designation_name = data.get('designation',)
     designation = db.session.query(Designation).filter_by(name = designation_name).first()
@@ -110,6 +113,11 @@ def editEmployee(id):
     employee.designation_id = designation.id
     db.session.commit()
     
+    if leaves == None:
+       leave = Leave(employee_id=id,leave_taken = leaves_taken) 
+       db.session.add(leave)
+       db.session.commit()
+
     #updating leave table
     leaves.leave_taken = leaves_taken
     db.session.commit()
@@ -117,6 +125,7 @@ def editEmployee(id):
 
 
 @app.route('/designation')
+@cross_origin()
 def getDesignation():
     select_query = db.session.query(Designation)
     get_designation = db.session.execute(select_query).scalars()
@@ -124,16 +133,17 @@ def getDesignation():
     for designation in get_designation:
 
         details = {
-            
+            'id' : designation.id,
             'name':designation.name,
-            'leaves_allottet' : designation.leaves_allotted,
+            'leaves_allotted' : designation.leaves_allotted,
         }
         designation_data.append(details)
 
     print(designation_data)
     return jsonify(designation_data)
 
-@app.route('/adddesignation',methods=['POST'])
+@app.route('/adddesignation/',methods=['POST'])
+@cross_origin()
 def addDesignation():
     data = request.get_json()
     name = data.get('name')
@@ -143,7 +153,27 @@ def addDesignation():
     db.session.commit()
     return jsonify({"message":"Designation added Succesfully"})
 
+@app.route('/updatedesignation',methods = ['PUT'])
+@cross_origin()
+def updateDesignation():
+    
+    data = request.get_json()
+    id = data.get('id')
+   
+    designation = db.session.query(Designation).filter_by(id =id).first()
+    if designation == None:
+        return jsonify({"message":"Something went wrong while sending update"})
+    designation.id = data.get('id',designation.id)
+    designation.name = data.get('name',designation.name)
+    designation.leaves_allotted = data.get('leaves_allotted',designation.leaves_allotted)
+    db.session.commit()
+    return jsonify({"message":"Designation Updated Successfully"})
+
+
+
+
 @app.route('/deletedesigantion',methods=['POST'])
+@cross_origin()
 def deleteDesignation():
     data = request.get_json()
     designationId =data['id']
@@ -151,20 +181,6 @@ def deleteDesignation():
     db.session.delete(designation)
     db.session.commit()
     return jsonify({'message':"designation deleted succesfully"})
-    
-
-
-
-
-
-
-
-
-
-    
-    
-
-
 
 with app.app_context():
     db.create_all()

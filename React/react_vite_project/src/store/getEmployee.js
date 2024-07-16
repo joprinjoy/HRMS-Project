@@ -13,7 +13,7 @@ export const EmployeeData = createAsyncThunk(
     'employeedatagetter',
     async()=>{
         const response = await getEmployeeData();
-            return response;
+            return response?.data;
         
     }
 )

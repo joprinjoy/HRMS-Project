@@ -5,7 +5,7 @@ export const getDesignationData=()=>{
     return(
         axios.get(url).then(
             (res)=>{
-                return res.data;
+                return res.data.data;
             },
             (error)=>{
                 return error;

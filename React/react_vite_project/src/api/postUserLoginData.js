@@ -1,19 +1,23 @@
 import axios from "axios";
 
-export const postUserLoginData = (credential)=>{
+export const postUserLoginData = (credential,successCB,errorCB  )=>{
     
     const url = `${import.meta.env.VITE_HRMS_BASE__URL}/login`
-
+    
     return(
         axios.post(url,credential).then(
-
             (res)=>{
-                console.log(res)
-                return res;
+                
+                const data = res.data.data
+                successCB(data)
+                return res.response;
             },
             (error)=>{
-                console.log(error,"errrr")
-                return error;
+                
+                const resp = error.response.data 
+                
+                errorCB(resp)
+                return error.response;
             }
         )
         

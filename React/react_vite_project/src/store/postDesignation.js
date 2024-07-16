@@ -10,8 +10,8 @@ const initialState = {
 
 export const PostAddDesignation= createAsyncThunk(
     'adddesignationpost',
-    async({designation,successCB})=>{
-        const response = PostAddDesignationData(designation,successCB);
+    async({designation,successCB,errorCB})=>{
+        const response = PostAddDesignationData(designation,successCB,errorCB);
         return response?.data;
     }
     
@@ -27,8 +27,8 @@ export const PostDeleteDesignation = createAsyncThunk(
 
 export const PostUpdateDesignation = createAsyncThunk(
     'updatedesignationpost',
-    async({designation,successCB})=>{
-        const response = PostUpdateDesignationData(designation,successCB)
+    async({designation,successCB,errorCB})=>{
+        const response = PostUpdateDesignationData(designation,successCB,errorCB)
         return response?.data
     }
 )

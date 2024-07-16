@@ -9,8 +9,8 @@ const initialState = {
 
 export const postUserLogin = createAsyncThunk(
     'userloginpost',
-    async (credential)=>{
-        const response = await postUserLoginData(credential)
+    async ({credential,successCB,errorCB})=>{
+        const response = await postUserLoginData(credential,successCB,errorCB)
             return response?.data
     }
 )
@@ -25,12 +25,14 @@ export const userLoginSlice = createSlice({
             .addCase(postUserLogin .pending, (state)=>{
                 state.status='loading'
             })
-            .addCase(postUserLogin.fulfilled,(state)=>{
+            .addCase(postUserLogin.fulfilled,(state,action)=>{
                 state.status ="succeeded"
+                state.data = action.payload;
                 
             })
-            .addCase(postUserLogin .rejected,(state)=>{
+            .addCase(postUserLogin .rejected,(state,action)=>{
                 state.status ="failed"
+                state.data = action.payload;
                 
             })
         }

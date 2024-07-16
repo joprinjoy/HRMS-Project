@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { PostUpdateDesignation } from '../../store/postDesignation';
+import FormHelperText from '@mui/material/FormHelperText';
+
 
 
 import {
@@ -19,14 +21,11 @@ const UpdateDesignation = ({open,id,handleClose})=>{
     
 
     const desigInitial ={id: '', leaves_allotted: '', name: ''}
-
-
-    
     const [designation,setDesignation]= useState(desigInitial)
+    const[errors,setErrors] = useState(null)
 
     const dispatch = useDispatch()
     
-    // const employeeData = useSelector((state) => state.employee.data);
     const designationData = useSelector((state)=>state.designation.data)    
 
     useEffect(()=>{
@@ -42,32 +41,22 @@ const UpdateDesignation = ({open,id,handleClose})=>{
    
     
 
-    console.log(designationData, "desigdata ");
-
-
-   
-    // setDesignation(designationData)
-
-        // const des = employeeData.reduce((acc, emp) => {
-        //     acc[emp.designation] = emp.designation;
-        //     return acc;
-        //   }, {});
-        //   setDesignation(des)
-
-    // }, [employeeData, empId]);
-
-
     
 
 
     const handleSuccess = ()=>{
+        setErrors(null)
         handleClose()
+    }
+    const handleError = (data)=>{
+        setErrors(data.status_message)
     }
 
     const handleUpdateEmployee = ()=>{
         dispatch(PostUpdateDesignation({
             designation:designation,
-            successCB:handleSuccess
+            successCB:handleSuccess,
+            errorCB:handleError
         }))
         
     }
@@ -105,7 +94,7 @@ const UpdateDesignation = ({open,id,handleClose})=>{
 
                 <TextField
                 required
-                id="outlined-required"
+                id="outlined-name-required"
                 label="Name"
                 type='text'
                 placeholder="Name"
@@ -115,7 +104,7 @@ const UpdateDesignation = ({open,id,handleClose})=>{
                 />
                  <TextField
                 required
-                id="outlined-required"
+                id="outlined-leaves-required"
                 label="Leaves Allotted"
                 type='number'
                 placeholder="Leaves Allotted"
@@ -123,7 +112,9 @@ const UpdateDesignation = ({open,id,handleClose})=>{
                 onChange={(event)=>{setDesignation({...designation,leaves_allotted:event.target.value})}}
                 
                 />
-               
+               <FormHelperText error sx={{ ml:2,mb:5 }}>
+                                {errors}
+                                </FormHelperText>
                 
 
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

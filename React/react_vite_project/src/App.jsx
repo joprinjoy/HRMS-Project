@@ -22,27 +22,27 @@ function App() {
     <>
 
     <Router>
-    <Navbar/>
       <Routes>
-  
-        <Route path='/' element={<Home/>}/>
-        <Route path='/viewemployee' element={<ViewEmployee/>}/>
-        <Route path='/admintools' element={<AdminTools/>}/>
-        <Route path='/addemployee' element={<AddEmployee/>}/>
-        <Route path='/viewdesignation' element={<ViewDesignation/>}/>
-        <Route path='/adddesignation' element={<AddDesignation/>}/>
-        <Route path='/updateemployee' element={<UpdateEmployee/>}/>
-        <Route path='/viewdetails' element={<ViewDetails/>}/>
+      <Route path='/' element={<Home/>}/>
+      <Route
+            path='*'
+            element={
+              <>
+                <Navbar />
+                <Routes>
+                  <Route path='/viewemployee' element={<ViewEmployee />} />
+                  <Route path='/admintools' element={<AdminTools />} />
+                  <Route path='/addemployee' element={<AddEmployee />} />
+                  <Route path='/viewdesignation' element={<ViewDesignation />} />
+                  <Route path='/adddesignation' element={<AddDesignation />} />
+                  <Route path='/updateemployee' element={<UpdateEmployee />} />
+                  <Route path='/viewdetails' element={<ViewDetails />} />
+                </Routes>
+              </>
+            }
+          />
 
-        
-
-
-
-
-
-
-        
-
+      
       </Routes>
     </Router>
      

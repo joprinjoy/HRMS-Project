@@ -24,24 +24,35 @@ const AddDesignation = ({ open, handleClose })=>{
         }
 
         const [designation,setDesignation] = useState(InitialData)
+        const [errors,setErrors] = useState(null)
 
 
         const dispatch = useDispatch()
 
         const handleAddSuccess =()=>{
             setDesignation(InitialData)
+            setErrors(null)
             handleClose()
         }
+        const handleError=(data)=>{
+            setErrors(data.status_message)
+
+        }
         const handleCloseButton =()=>{
+            setDesignation(InitialData)
+            setErrors(null)
             handleClose()
         }
 
         const handleAddDesignation =(e)=>{
             e.preventDefault();
-            console.log(designation,"designation")
+          
             dispatch(PostAddDesignation(
                 {designation:designation,
-                successCB:handleAddSuccess}
+                successCB:handleAddSuccess,
+                errorCB:handleError,
+                
+            }
             ))
             
             
@@ -86,14 +97,18 @@ const AddDesignation = ({ open, handleClose })=>{
                                     value={designation.leaves_allotted}
                                     onChange={(event)=>{setDesignation({...designation,leaves_allotted:event.target.value})}}
                                     />
+                                    <FormHelperText error sx={{ ml:2}}>
+                                    {errors}
+                                    </FormHelperText> 
 
                                     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                                         <Button variant="contained" onClick={handleAddDesignation}>Add </Button>
                                         <Button onClick={handleCloseButton} color="success">Cancel</Button>
                                     </Box>
-                            </div>                                                  
+                            </div>   
+                                                                          
                         </Box>
-                        <FormHelperText error sx={{ mt: 2 }}> {'errorMsg'}</FormHelperText>   
+                          
                     </DialogContent>                    
             </Dialog>
 

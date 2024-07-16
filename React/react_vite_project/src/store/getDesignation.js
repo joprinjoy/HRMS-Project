@@ -12,7 +12,7 @@ export const  DesignationData = createAsyncThunk(
     'designationdatagetter',
     async()=>{
         const response = await getDesignationData();
-        return response;
+        return response.data;
     }
 )
 

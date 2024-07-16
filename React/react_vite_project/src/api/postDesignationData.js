@@ -1,18 +1,18 @@
 import axios from "axios";
 
 
-export const PostAddDesignationData = (designation,successCB)=>{
+export const PostAddDesignationData = (designation,successCB,errorCB)=>{
 
     const url = `${import.meta.env.VITE_HRMS_BASE__URL}/adddesignation`
     return(
-        axios.post(url,designation).then(
+        axios.post(url,designation,errorCB).then(
             (res)=>{
-                console.log(res,"res")
                 successCB()
                 return res;
             },
             (error)=>{
-                console.log(error,"errrrr")
+                const resp = error.response.data
+                errorCB(resp)
                 return error;
             }
         )
@@ -27,12 +27,12 @@ export const PostDeleteDesignationData = ({id,successCB})=>{
     return(
         axios.post(url,{id}).then(
             (res)=>{
-                console.log(res,"res")
+                
                 successCB()
-                return res;
+                return res.data.data;
             },
             (error)=>{
-                console.log(error,"errrrr")
+                
                 return error;
             }
         )
@@ -41,18 +41,20 @@ export const PostDeleteDesignationData = ({id,successCB})=>{
     )
 }
 
-export const PostUpdateDesignationData =(designation,successCB)=>{
+export const PostUpdateDesignationData =(designation,successCB,errorCB)=>{
 
     const url = `${import.meta.env.VITE_HRMS_BASE__URL}/updatedesignation`
     return(
         axios.put(url,designation).then(
             (res)=>{
-                console.log(res,"res")
+                
                 successCB()
                 return res.data;
             },
             (error)=>{
-                console.log(error,"errrrr")
+                
+                const resp = error.response.data 
+                errorCB(resp)
                 return error;
             }
         )

@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { EmployeeData } from "../../store/getEmployee"
 import { DesignationData } from "../../store/getDesignation"
-
-
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,13 +16,15 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import UpdateEmployee from "./UpdateEmployee";
 import ViewDetails from "../ViewDetails";
-// import {GetEmployee} from "./getEmployeeData"
+import axios from "axios";
+
+
+import Box from '@mui/material/Box';
+
 
 
 const ViewEmployee = ()=>{
 
-  // const {loading, error, data} = GetEmployee()
-  // console.log(data, error, loading, "apicall");
 
     const [openUpdateEmployee,setopenUpdateEmployee] = useState(false)
     const [openEmployeeView,setOpenEmployeeView] = useState(false)
@@ -84,9 +84,26 @@ const ViewEmployee = ()=>{
           dispatch(EmployeeData())
       }
 
+      const handleSuccess = ()=>{
+        dispatch(EmployeeData())
+      }
+
 
       const handleDelete = (id)=>{
-        console.log(id,"delete")
+      const url = `${import.meta.env.VITE_HRMS_BASE__URL}/delete/employee`
+
+        
+        const employeeId ={id:id}
+        axios.post(url,employeeId).then(
+          (res)=>{
+            
+            handleSuccess()
+            return res
+          },
+          (error)=>{
+            return error
+          }
+        )
    
      }
   
@@ -111,10 +128,14 @@ const ViewEmployee = ()=>{
    
 
     return(
+      
         <> 
+        <Box>
+            
+        </Box>
 
-        <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700,  }} aria-label="customized table">
+        <TableContainer component={Paper} sx={{ minWidth: '100%'}}>
+      <Table sx={{ minWidth: '100%'  }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Sl.No</StyledTableCell>
@@ -179,7 +200,6 @@ const ViewEmployee = ()=>{
                     handleClose = {handleCloseView}
                     
                     />
-
         </>
     )
 }

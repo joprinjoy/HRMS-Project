@@ -49,7 +49,7 @@ const ViewDesignation = ()=>{
     }
     
    const handleDelete = (id)=>{
-      console.log(id,"delete")
+      
       
       dispatch(PostDeleteDesignation({
         id:id ,successCB:deleteSuccess}))
@@ -57,9 +57,10 @@ const ViewDesignation = ()=>{
 
 
    const handleUpdate = (id)=>{
-    console.log("update")
+    
     setOpenUpdateDesignation(true)
     setDesignationId(id)
+    
  }  
 
     useEffect(
@@ -90,6 +91,7 @@ const ViewDesignation = ()=>{
         },
       }));
   const HandleCloseUpdateDesignation  =()=>{
+    dispatch(DesignationData())
     setOpenUpdateDesignation(false)
   }  
       
@@ -121,7 +123,7 @@ return (
                 {index+1}
               </StyledTableCell>
               <StyledTableCell align="center">{item.name}</StyledTableCell>
-              <StyledTableCell align="center">{item.leaves_allottet}</StyledTableCell>
+              <StyledTableCell align="center">{item.leaves_allotted}</StyledTableCell>
               <StyledTableCell align="center">
 
                 <ButtonGroup variant="text" aria-label="Basic button group" >                                 

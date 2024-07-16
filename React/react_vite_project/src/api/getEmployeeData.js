@@ -6,11 +6,10 @@ export const getEmployeeData =()=>{
     return(
         axios.get(url).then(
             (res)=>{
-                console.log(res,"res")
-                return res.data;
+                return res.data.data;
             },
             (error)=>{
-                console.log(error,"errrrr")
+                
                 return error;
             }
         )

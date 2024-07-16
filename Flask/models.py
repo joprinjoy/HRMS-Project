@@ -54,9 +54,12 @@ class Credential(Base):
     __table_args__= (UniqueConstraint('username','_password'),)
     id : Mapped[int] = mapped_column(primary_key=True)
     username:Mapped[str] = mapped_column(String(30),nullable=False)
-    _password:Mapped[str] = mapped_column(String(30),nullable=False)
+    _password:Mapped[str] = mapped_column(String(255),nullable=False)
+    
 
-
+def __init__(self, username, password):
+        self.username = username
+        self._password = password
 
 def init_db(db_uri='postgresql://postgres:postgres@localhost:5432/flask_db'):
     logger = logging.getLogger("FlaskApp")

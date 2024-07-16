@@ -1,12 +1,17 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { PostAddEmployee } from '../../store/postEmployee';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { DesignationData } from '../../store/getDesignation';
 
-
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 
 const AddEmployee = ()=>{
         const InitialData = {
@@ -19,18 +24,38 @@ const AddEmployee = ()=>{
         }
 
     const [employee,setEmployee]= useState(InitialData)
+    const[errors,setErrors]=useState(null)
     const dispatch = useDispatch()
+    const designationData = useSelector((state)=>state.designation.data)  
+
+    
+
+    useEffect( 
+        ()=>{
+            if(designationData.length<1){
+                dispatch(DesignationData ())
+            }
+        }
+    )
 
 
     const handleSuccess = ()=>{
         setEmployee(InitialData)
+        setErrors(null)
+    }
+    const handleError = (data)=>{
+        
+        setErrors(data.status_message)
     }
 
     const handleAddEmployee = (e)=>{
         e.preventDefault();
-        console.log("register")
+        
         dispatch(PostAddEmployee({
-            employee:employee,successCB:handleSuccess}
+            employee:employee,
+            successCB:handleSuccess,
+            errorCB:handleError,
+        }
         ))
 
 
@@ -46,6 +71,7 @@ const AddEmployee = ()=>{
             component="form"
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '60ch' },
+                '& .Select-root' :{ m: 1, width: '60ch' },
             }}
             noValidate
             autoComplete="off"
@@ -70,15 +96,22 @@ const AddEmployee = ()=>{
                 onChange={(event)=>{setEmployee({...employee,last_name:event.target.value})}}
                 
                 />
-                <TextField
-                required
-                id="outlined-phone-required"
-                label="Designation"
-                placeholder="Designation"
-                value={employee.designation}
+               
+                <FormControl sx={{m: 1 ,width: '60ch'}}>
+                <InputLabel id="designation-label">Designation</InputLabel>
+                <Select 
+                  labelId="designation--label"
+                  value={employee.designation}
+                  label="Designation"
                 onChange={(event)=>{setEmployee({...employee,designation:event.target.value})}}
-                
-                />
+                >
+                  {designationData.map((item,index) => (
+                    <MenuItem key={index} value={item.name}>
+                        {item.name}</MenuItem>
+                  ))}
+                </Select>
+                </FormControl>
+
                 <TextField
                 required
                 id="outlined-phone-required"
@@ -109,37 +142,9 @@ const AddEmployee = ()=>{
                 onChange={(event)=>{setEmployee({...employee,address:event.target.value})}}
                 
                 />
-
-                {/* <TextField
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                /> */}
-                {/* <TextField
-                id="outlined-read-only-input"
-                label="Read Only"
-                defaultValue="Hello World"
-                InputProps={{
-                    readOnly: true,
-                }}
-                />
-                <TextField
-                id="outlined-number"
-                label="Number"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                />
-                <TextField id="outlined-search" label="Search field" type="search" />
-
-                <TextField
-                id="outlined-helperText"
-                label="Helper text"
-                defaultValue="Default Value"
-                helperText="Some important text"
-                /> */}
+                <FormHelperText error sx={{ ml:25,mt:5, fontSize:16}}>
+                                {errors}
+                                </FormHelperText>
 
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <Button variant="contained" onClick={handleAddEmployee }>Add Employee</Button>

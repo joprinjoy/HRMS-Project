@@ -3,20 +3,18 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { EmployeeData } from '../../store/getEmployee';
 import { PostUpdateEmployee } from '../../store/postEmployee';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-
+import FormHelperText from '@mui/material/FormHelperText';
 import {
     Dialog,
     DialogTitle,
     DialogContent,
    
   } from "@mui/material";
-
 
 const UpdateEmployee = ({open,empId,handleClose})=>{
     
@@ -27,79 +25,44 @@ const UpdateEmployee = ({open,empId,handleClose})=>{
             phone : "",
             email : "",
             address : "",
-            leaves_taken: ""
+            leaves_taken:""
         }
-
-        // const desigInitial ={id: "0", leaves_allottet: 0, name: 'select'}
-
 
     const [employee,setEmployee]= useState(InitialData)
-    // const [designation,setDesignation]= useState(desigInitial)
-
-
-    
-
+    const [errors,setErrors] = useState(null)
 
     const dispatch = useDispatch()
-    
     const employeeData = useSelector((state) => state.employee.data);
     const designationData = useSelector((state)=>state.designation.data)    
-
-
-   
-    console.log(employee.first_name)
-
-    console.log(designationData, "desigdata ");
-
+    
+    
 
     useEffect(() => {
-    
-
-        if (employeeData.length>0) {
-            
+        if (employeeData.length>0 ) {  
             const employeeToUpdate = employeeData.find((emp) => emp.id === empId);
             if (employeeToUpdate) {
-
                 setEmployee(employeeToUpdate);
-
-
-            }
-            
-
-        }
-    // setDesignation(designationData)
-
-        // const des = employeeData.reduce((acc, emp) => {
-        //     acc[emp.designation] = emp.designation;
-        //     return acc;
-        //   }, {});
-        //   setDesignation(des)
-
-    }, [employeeData, empId]);
-
-
-    
-
+            } 
+        }}, [employeeData, empId]);
 
     const handleSuccess = ()=>{
+        setErrors(null)
         handleClose()
+    }
+    const handleError = (data)=>{
+        setErrors(data.status_message) 
     }
 
     const handleAddEmployee = ()=>{
         dispatch(PostUpdateEmployee({
             employee:employee,
-            successCB:handleSuccess
-        }))
-        
+            successCB:handleSuccess,
+            errorCB:handleError
+        }))  
     }
 
-    
-
-
     return (
-
         <>  
-
         <Dialog
                 open={open}
                 onClose={handleClose}
@@ -107,7 +70,6 @@ const UpdateEmployee = ({open,empId,handleClose})=>{
                 >
                 <DialogTitle id="form-dialog-title">Update Employee</DialogTitle>
                     <DialogContent>
-
         <Box
             component="form"
             sx={{
@@ -118,16 +80,12 @@ const UpdateEmployee = ({open,empId,handleClose})=>{
             noValidate
             autoComplete="off"
             >
-            
                 <TextField
                 disabled
                 id="outlined-disabled"
                 label="ID"
                 value={employee.id || ""}
                 />
-            
-                
-
                 <TextField
                 required
                 id="outlined-required"
@@ -146,34 +104,24 @@ const UpdateEmployee = ({open,empId,handleClose})=>{
                 onChange={(event)=>{setEmployee({...employee,last_name:event.target.value})}}
                 
                 />
-                {/* <TextField
-                required
-                id="outlined-required"
-                label="Designation"
-                placeholder="Designation"
-                value={employee.designation}
-                onChange={(event)=>{setEmployee({...employee,designation:event.target.value})}}
                 
-                /> */}
 
-                <FormControl >
+                <FormControl fullWidth>
                 <InputLabel id="designation-label">Designation</InputLabel>
-                <Select sx={{width: '60ch'}}
-                  labelId="designation-label"
-                  id="designation-select"
-                  value={employeeData.designation}
-                  label="Designation"
-                //   onChange={handleDesignationChange}
-                onChange={(event)=>{setEmployee({...employee,designation:event.target.value})}}
-                >
-                  {Object.entries(designationData).map(([key, value]) => (
-                    <MenuItem key={key} value={value.name}>
-                        {value.name}</MenuItem>
-                  ))}
-                </Select>
-                 </FormControl>
-
-
+                    <Select 
+                        labelId="designation--label"
+                        //   id="designation-select"
+                        value={employee.designation}
+                        label="Designation"
+                        
+                        onChange={(event)=>{setEmployee({...employee,designation:event.target.value})}}
+                        >
+                        {designationData.map((item,index) => (
+                        <MenuItem key={index} value={item.name}>
+                                {item.name}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <TextField
                 required
                 id="outlined-required"
@@ -217,6 +165,9 @@ const UpdateEmployee = ({open,empId,handleClose})=>{
                 
                 />
                 
+                <FormHelperText error sx={{ mb: 5 }}>
+                                {errors}
+                                </FormHelperText>
 
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                  <Button variant="contained" onClick={handleAddEmployee }>Update</Button>

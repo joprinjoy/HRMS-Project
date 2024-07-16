@@ -8,8 +8,8 @@ const initialState = {
 
 export const PostAddEmployee = createAsyncThunk(
     'addemployeepost',
-    async({employee,successCB})=>{
-        const response = postEmployeeData(employee,successCB);
+    async({employee,successCB,errorCB})=>{
+        const response = postEmployeeData(employee,successCB,errorCB);
         return response.data;
     }
     
@@ -17,9 +17,9 @@ export const PostAddEmployee = createAsyncThunk(
 
 export const PostUpdateEmployee = createAsyncThunk(
     'addemployeepost',
-    async({employee,successCB})=>{
-        const response = postEmployeeDataUpdate(employee,successCB);
-        console.log('updatethunk')
+    async({employee,successCB,errorCB})=>{
+        const response = postEmployeeDataUpdate(employee,successCB,errorCB);
+        
         return response.data;
     }
     

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { EmployeeData } from "../../store/getEmployee"
-import { DesignationData } from "../../store/getDesignation"
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -36,9 +35,6 @@ const ViewEmployee = ()=>{
 
     useEffect (()=>{
         dispatch(EmployeeData())
-        dispatch(DesignationData())
-        
-
     },[dispatch])
 
 
@@ -110,14 +106,11 @@ const ViewEmployee = ()=>{
   
      const handleUpdate = (id)=>{
         setEmployeeId(id)
-
         setopenUpdateEmployee(true)   
       } 
-
+    // handles the eployee contact view
    const handleOpenView = (id)=>{
       setEmployeeId(id)
-      
-
       setOpenEmployeeView(true)
    }
 

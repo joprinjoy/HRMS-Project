@@ -75,7 +75,7 @@ const UpdateDesignation = ({open,id,handleClose})=>{
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
                 >
-                <DialogTitle id="form-dialog-title">Update Employee</DialogTitle>
+                <DialogTitle id="form-dialog-title">Update Designation</DialogTitle>
                     <DialogContent>
 
         <Box

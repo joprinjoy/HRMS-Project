@@ -177,7 +177,7 @@ const handleLogout=()=>{
                 to={'/viewemployee'}
                 sx={{ my: 3, color: 'white', display: 'block' }}
               >
-                View Employee
+                View Employees
               </Button>
           
             <Tooltip title="Open settings">

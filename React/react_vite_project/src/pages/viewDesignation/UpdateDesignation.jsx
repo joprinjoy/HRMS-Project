@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { PostUpdateDesignation } from '../../store/postDesignation';
 import FormHelperText from '@mui/material/FormHelperText';
+import PropTypes from 'prop-types';
 
 
 
@@ -17,7 +18,11 @@ import {
 
 
 const UpdateDesignation = ({open,id,handleClose})=>{
-    
+    UpdateDesignation.propTypes ={
+        open:PropTypes.bool.isRequired,
+        handleClose:PropTypes.func,
+        id:PropTypes.number,
+    }
     
 
     const desigInitial ={id: '', leaves_allotted: '', name: ''}

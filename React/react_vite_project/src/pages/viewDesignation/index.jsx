@@ -98,7 +98,7 @@ const ViewDesignation = ()=>{
 
 return (
         <>
-        <h2>Designation</h2>
+        
         <Stack direction="row" spacing={2}>
       
             <IconButton aria-label="Add Designation" size="Large" title="Add New " onClick={handleOpenAddDesignation}>
@@ -109,7 +109,7 @@ return (
       <Table sx={{ minWidth: 700,  }} aria-label="Designation view">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Sl.No</StyledTableCell>
+            
             <StyledTableCell align="center">Name</StyledTableCell>
             <StyledTableCell align="center">Leaves Allotted</StyledTableCell>
             <StyledTableCell align="center">Actions</StyledTableCell>
@@ -119,9 +119,6 @@ return (
         <TableBody>
           {designationData.map((item,index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell align="center" component="th" scope="row">
-                {index+1}
-              </StyledTableCell>
               <StyledTableCell align="center">{item.name}</StyledTableCell>
               <StyledTableCell align="center">{item.leaves_allotted}</StyledTableCell>
               <StyledTableCell align="center">

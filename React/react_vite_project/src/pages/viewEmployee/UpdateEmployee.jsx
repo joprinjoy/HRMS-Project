@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import PropTypes from 'prop-types';
 import {
     Dialog,
     DialogTitle,
@@ -17,6 +18,11 @@ import {
   } from "@mui/material";
 
 const UpdateEmployee = ({open,empId,handleClose})=>{
+    UpdateEmployee.propTypes ={
+        open:PropTypes.bool.isRequired,
+        handleClose:PropTypes.func,
+        empId:PropTypes.number,
+    }
     
         const InitialData = {
             first_name :"",

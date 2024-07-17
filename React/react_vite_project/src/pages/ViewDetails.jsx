@@ -25,18 +25,13 @@ const ViewDetails = ({open,handleClose,empId}) => {
 } 
 
     const [vCardString, setVCardString] = useState('');
-    const [employeeData,setEmployeeData] = useState(InitialData)
-    console.log(employeeData)
-    
-
-    
+    const [employeeData,setEmployeeData] = useState(InitialData)  
     const employeeDatas = useSelector((state)=> state.employee.data)
 
 
     useEffect(() => {
       if (employeeDatas.length > 0) {
         const employeedetail = employeeDatas.find((emp) => emp.id === empId);
-        console.log(empId);
         setEmployeeData(employeedetail);
         generateVCard(employeedetail);
       }

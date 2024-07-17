@@ -138,7 +138,6 @@ const ViewEmployee = ()=>{
       <Table sx={{ minWidth: '100%'  }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Sl.No</StyledTableCell>
             <StyledTableCell align="center">Employee ID</StyledTableCell>
             <StyledTableCell align="center">Name</StyledTableCell>
             <StyledTableCell align="center">Designation</StyledTableCell>
@@ -154,9 +153,6 @@ const ViewEmployee = ()=>{
         <TableBody>
           {employeeDatas.map((item,index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell align="center" component="th" scope="row">
-                {index+1}
-              </StyledTableCell>
               <StyledTableCell align="center">{item.id}</StyledTableCell>
               <StyledTableCell align="center"><Button onClick={()=>{handleOpenView(item.id)}} className="hover-button">{item.first_name +" "+ item.last_name}</Button></StyledTableCell>
               <StyledTableCell align="center">{item.designation}</StyledTableCell>

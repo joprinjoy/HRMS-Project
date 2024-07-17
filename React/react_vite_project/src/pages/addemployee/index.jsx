@@ -71,7 +71,7 @@ const AddEmployee = ()=>{
             component="form"
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '60ch' },
-                '& .Select-root' :{ m: 1, width: '60ch' },
+                '& .MuiFormControl-root': { m: 1, width: '60ch' }
             }}
             noValidate
             autoComplete="off"
@@ -97,7 +97,7 @@ const AddEmployee = ()=>{
                 
                 />
                
-                <FormControl sx={{m: 1 ,width: '60ch'}}>
+                <FormControl>
                 <InputLabel id="designation-label">Designation</InputLabel>
                 <Select 
                   labelId="designation--label"
@@ -111,7 +111,7 @@ const AddEmployee = ()=>{
                   ))}
                 </Select>
                 </FormControl>
-
+                
                 <TextField
                 required
                 id="outlined-phone-required"

@@ -11,11 +11,16 @@ import {
     DialogContent,
    
   } from "@mui/material";
+import PropTypes from 'prop-types';
+
 
 
 
 const AddDesignation = ({ open, handleClose })=>{
-
+    AddDesignation.propTypes ={
+        open:PropTypes.bool.isRequired,
+        handleClose:PropTypes.func,
+    }
 
         const InitialData = {
             name :"",

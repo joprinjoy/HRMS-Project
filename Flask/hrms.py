@@ -4,7 +4,7 @@ from models import *
 from flask_cors import CORS,cross_origin
 import datetime as dt
 from flask_bcrypt import Bcrypt 
-from flask_migrate import Migrate
+
 
 app = flask.Flask(__name__)
 
@@ -15,7 +15,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@localhos
 
 # initialize the app with the extension
 db.init_app(app)
-migrate = Migrate(app, db)
+
 
 CORS(app)
 
@@ -32,11 +32,21 @@ def index():
 @cross_origin()
 def login():
     data = request.get_json()
-    # breakpoint()
     uname = data.get('username')
     password = data.get('password')
-    # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8') 
-    # print(hashed_password)
+    if not uname:
+        return jsonify({
+            "data":{},
+            "status": False,
+            "status_message":"Enter username",
+            "timestamp":now}), 400 
+    if not password:
+        return jsonify({
+            "data":{},
+            "status": False,
+            "status_message":"Enter password",
+            "timestamp":now}), 400 
+
     credential = db.session.query(Credential).filter_by(username=uname).first()  
     if credential == None: 
         return jsonify({
@@ -44,13 +54,8 @@ def login():
             "status": False,
             "status_message":"Username not Found",
             "timestamp":now}), 400 
-    # is_valid = bcrypt.check_password_hash(hashed_password, credential._password) 
-    # is_valid = check_password_hash(credential._password, password)
     is_valid = bcrypt.check_password_hash(credential._password, password)
     print(is_valid)
-    print(credential._password)
-    # if hashed_password==credential._password:
-    # if uname == credential.username and password == credential._password:
     if is_valid:
         session['user'] = credential.username
         session['user_id'] = credential.id
@@ -236,7 +241,15 @@ def deleteEmployee():
     data = request.get_json()
     now = dt.datetime.now(dt.timezone.utc).isoformat() 
     employeeId =data['id']
-    employee =db.session.query(Employee).filter_by(id=employeeId).first()
+    try:
+        employee =db.session.query(Employee).filter_by(id=employeeId).first()
+    except:
+        return jsonify({
+            "data":{},
+            "status": True,
+            "status_message": "Error Deleting employee",
+            "timestamp":now}), 400
+
     employee.deleted_at =  now
     db.session.commit()
     return jsonify({
@@ -291,7 +304,7 @@ def addDesignation():
     return jsonify({
                 "data":{},
                 "status": False,
-                "status_message": " Designation aready Exist",
+                "status_message": " Designation already Exist",
                 "timestamp":now}), 400
 
 @app.route('/updatedesignation',methods = ['PUT'])
@@ -352,18 +365,25 @@ def register():
     # Add the new user to the database
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"message": "User registered successfully!"}), 201
+    return jsonify({
+            "data":{},
+            "status": True,
+            "status_message": "User registered Successfully ",
+            "timestamp":now}), 200
 
 
 
 @app.route('/logout',methods=['POST'])
 @cross_origin()
-def delete():
+def logout():
     user_id = session.get('user_id')
-    print(user_id)
     session.pop('username', None)
     session.pop('user_id', None)   
-    return {}, 204
+    return jsonify({
+            "data":{},
+            "status": True,
+            "status_message": "Logged out successfully",
+            "timestamp":now}), 204
 
 
 
@@ -372,4 +392,4 @@ with app.app_context():
 
 if __name__ == "__main__":
   init_db()
-  app.run(debug=True,port=5005)
+  app.run(debug=True,port=5000)

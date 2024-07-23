@@ -84,7 +84,7 @@ const Home = ()=>{
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'url("https://3.imimg.com/data3/IU/NA/MY-4439715/hrms-500x500.jpg")',
+                        backgroundImage: 'url("src/static/hrms_login_bg.jpg")',
                         backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'left',
@@ -133,6 +133,9 @@ const Home = ()=>{
                                     value={credential.password}
                                     onChange={(event) => setCredential({ ...credential, password: event.target.value })}
                                 />
+                                    
+                                
+
                                 <Button
                                     type="button"
                                     fullWidth
@@ -144,7 +147,8 @@ const Home = ()=>{
                                 </Button>
                                 <FormHelperText error sx={{ mt: 2 }}>
                                     {errors}
-                                </FormHelperText>
+                                </FormHelperText>   
+                                
                             </Box>
                         </Grid>
                     </Grid>

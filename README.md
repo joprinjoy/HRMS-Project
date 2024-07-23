@@ -26,6 +26,10 @@
 - `pip install -r requirements.txt`
 - `flask --app hrms run --debug`
 
+- **React**
+- _To run vite-react app,navigate to react app folder and run this command_
+- `npm run dev`
+
 - **Unit Test :-**
 - _create a new database and setup in in hrms.py and models to avoid losing project data_
 - _navigate to Flask folder/_

@@ -28,6 +28,7 @@
 
 - **React**
 - _To run vite-react app,navigate to react app folder and run this command_
+- `npm install`
 - `npm run dev`
 
 - **Unit Test :-**

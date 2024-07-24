@@ -1,37 +1,27 @@
 # HRMS-Project
 
-- _Currrent credentials to login:_
-- username:hr@company.com ,
-  password:hrpassword
-  
-- _To register a new user Login use any third party tool like postman :_
-
-   _Endpoint_: `http://127.0.0.1:5000/registeruser`
-
-- _Json data model:_
-
-    {
-    username:"hr@company.com ",
-
-    password:"hrpassword"
-    }
-
-- _Make sure a user is created before login._
+**Setup and run Flask:-**
 
 - _Flask Running_ on http://127.0.0.1:5000.
-
 - `requirements.txt` file attched to install all required packages for flask.
 - _navigate to Flask/ and run_
 - `. .venv/bin/activate` (`any virtual environemt can use`)
 - `pip install -r requirements.txt`
 - `flask --app hrms run --debug`
+- _close the flask program using_ `ctrl+c` 
+- _run the file named_ register_admin.py _using the command_
+- `python3 register_admin.py`
+- _now run the flask again_
+- `flask --app hrms run --debug`
 
-- **React**
+
+ **React:-**
 - _To run vite-react app,navigate to react app folder and run this command_
 - `npm install`
 - `npm run dev`
 
-- **Unit Test :-**
+
+ **Unit Test :-**
 - _create a new database and setup in in hrms.py and models to avoid losing project data_
 - _navigate to Flask folder/_
 - _follow the commands_
@@ -39,6 +29,15 @@
 - `coverage run -m unittest discover`
 - `coverage report`
 - `coverage html`
+
+
+  **In the browser:-**
+- _Currrent admin credentials to login:_
+  
+- username:admin@company.com
+
+  
+  password:admin
   
 
 

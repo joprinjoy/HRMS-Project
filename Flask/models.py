@@ -1,13 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String,DateTime
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import mapped_column
 from typing import List
 import logging
 from sqlalchemy.orm import Mapped,relationship,sessionmaker
-from sqlalchemy import UniqueConstraint,ForeignKey,create_engine
+from sqlalchemy import UniqueConstraint,ForeignKey,create_engine,String,Integer,Column,Enum as SqlEnum
 from datetime import datetime,timezone
+from enum import Enum
 
 class Base(DeclarativeBase):
   def __repr__(self):
@@ -49,17 +49,24 @@ class Leave(Base):
   leave_taken : Mapped[int] = mapped_column(default=0)
   employees : Mapped["Employee"] = relationship("Employee",back_populates='leave')
 
+
+class UserRole(Enum):
+    ADMIN = "admin"
+    USER = "user"
+
 class Credential(Base):
     __tablename__="credential"
-    __table_args__= (UniqueConstraint('username','_password'),)
+    __table_args__= (UniqueConstraint('username'),)
     id : Mapped[int] = mapped_column(primary_key=True)
     username:Mapped[str] = mapped_column(String(30),nullable=False)
     _password:Mapped[str] = mapped_column(String(255),nullable=False)
+    role = Column(SqlEnum(UserRole), nullable=False)
     
 
-def __init__(self, username, password):
-        self.username = username
-        self._password = password
+    def __init__(self, username, password,role):
+            self.username = username
+            self._password = password
+            self.role = role
 
 def init_db(db_uri='postgresql://postgres:postgres@localhost:5432/flask_db'):
     logger = logging.getLogger("FlaskApp")

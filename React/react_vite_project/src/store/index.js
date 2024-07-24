@@ -4,6 +4,7 @@ import {addEmployeeReducer,updateEmployeeReducer} from './postEmployee'
 import GetDesignationReducer from './getDesignation'
 import {PostDesignationReducer,DeleteDesignationReducer,UpdateDesignationReducer} from './postDesignation'
 import PostLoginDataReducer from './postUserLogin'
+import GetUserDataReducer from './getAdmin'
 
 
 export const store =  configureStore({
@@ -17,6 +18,7 @@ export const store =  configureStore({
         updateEmployee : updateEmployeeReducer,
         updateDesignation : UpdateDesignationReducer,
         login:PostLoginDataReducer,
+        user:GetUserDataReducer,
        
         
 

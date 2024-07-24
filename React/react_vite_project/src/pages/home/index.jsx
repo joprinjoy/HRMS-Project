@@ -39,24 +39,37 @@ const Home = ()=>{
         
         //setting user details in local storage
         localStorage.setItem('user', JSON.stringify(data))
+        
+        // console.log(data.role);
+
+        // console.log(data.user);
+        data.role === "admin" ? (navigate('/adminhome') ):(
         navigate('/viewemployee') 
+            
+        )
     }
 
     const handleError = (data)=>{
 
         setErrors(data.status_message)
     }
-
+    
     useEffect(
         ()=>{
-            let user =localStorage.getItem('user')
-            if (user) {
-                user = JSON.parse(user);
-                setUserData(user);
+            let data =localStorage.getItem('user')
+            if (data) {
+                data = JSON.parse(data);
+                setUserData(data);
+                if (data.role == 'admin'){
+                    navigate('/adminhome')
+                }
+                if (data.role == 'user'){
+                    navigate('/viewemployee')
+                }
+                
             }
-            if (userData){
-                navigate('/viewemployee')
-            }
+            
+            
     },[navigate,userData])
 
     const handleLogin = ()=>{

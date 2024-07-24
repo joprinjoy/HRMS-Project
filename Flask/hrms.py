@@ -3,7 +3,8 @@ from flask import request,session,jsonify,session
 from models import *
 from flask_cors import CORS,cross_origin
 import datetime as dt
-from flask_bcrypt import Bcrypt 
+# from flask_bcrypt import Bcrypt 
+import bcrypt
 
 
 app = flask.Flask(__name__)
@@ -20,7 +21,7 @@ db.init_app(app)
 CORS(app)
 
 #  Bcrypt object and pass our Flask app as an argument.
-bcrypt = Bcrypt(app) 
+# bcrypt = Bcrypt(app) 
 
 now = dt.datetime.now(dt.timezone.utc).isoformat() 
 
@@ -32,6 +33,7 @@ def index():
 @cross_origin()
 def login():
     data = request.get_json()
+    # breakpoint()
     uname = data.get('username')
     password = data.get('password')
     if not uname:
@@ -54,14 +56,18 @@ def login():
             "status": False,
             "status_message":"Username not Found",
             "timestamp":now}), 400 
-    is_valid = bcrypt.check_password_hash(credential._password, password)
+    role = credential.role
+    #check_password method woks with flask only
+
+    # is_valid = bcrypt.check_password_hash(credential._password, password)
+    is_valid= bcrypt.checkpw(password.encode('utf-8'), credential._password.encode('utf-8'))
     print(is_valid)
     if is_valid:
         session['user'] = credential.username
         session['user_id'] = credential.id
-        print(session['user'])
+        
         return jsonify({
-            "data":{'user':session['user'],'user_id':session['user_id']},
+            "data":{'user':session['user'],'user_id':session['user_id'],'role':role.value},
             "status": True,
             "status_message":"Login Successful",
             "timestamp":now}), 200
@@ -355,13 +361,23 @@ def deleteDesignation():
 
 #used with thirdparty tools
 @app.route('/registeruser',methods = ['POST'])
+@cross_origin()
 def register():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    if not all([username,password]):
+        return jsonify({
+            "data":{},
+            "status": False,
+            "status_message": " Fill all the fields",
+            "timestamp":now}), 400
+    username = data.get('username')
+    password = data.get('password')
+    # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     # Create a new user
-    new_user = Credential(username=username, _password=hashed_password)
+    new_user = Credential(username=username, password=hashed_password,role=UserRole.USER)
     # Add the new user to the database
     db.session.add(new_user)
     db.session.commit()
@@ -371,6 +387,26 @@ def register():
             "status_message": "User registered Successfully ",
             "timestamp":now}), 200
 
+
+@app.route('/user')
+@cross_origin()
+def getUser():
+    select_query = db.session.query(Credential)
+    get_user = db.session.execute(select_query).scalars()
+    user_data =[]
+    for user in get_user:
+
+        details = {
+            'id':user.id,
+            'username':user.username,
+            'role':user.role.value    
+        }
+        user_data.append(details)
+    return jsonify({
+            "data":{"data":user_data},
+            "status": True,
+            "status_message": "Data Send Successfully ",
+            "timestamp":now}), 200
 
 
 @app.route('/logout',methods=['POST'])

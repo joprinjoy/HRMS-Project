@@ -19,20 +19,10 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MenuIcon from '@mui/icons-material/Menu';
-
-
-
-
-
-
-
+import AddUser from '../pages/adminLogin/AddUser';
 
 
 const NavBar =()=>{
-
-
-
-
 
 const settings = [{name:'View Designations',path:'/viewdesignation'},
                     {name:'Add Employee',path:'/addemployee'}]
@@ -42,6 +32,7 @@ const [anchorElAdmin, setAnchorElAdmin] = useState(null);
 // const [anchorElUser, setAnchorElUser] = useState(null);
 const[userData,setUserData]= useState({})
 const [open, setOpen] = useState(false);
+const [addUserModal, setAddUserModal] = useState(false)
 
 const toggleDrawer = (newOpen) => () => {
   setOpen(newOpen);
@@ -134,6 +125,15 @@ const handleLogout=()=>{
           </Box>
     );
 
+
+    const handleAddUserClick = ()=>{
+      setAddUserModal(true)
+    }
+    const handleCloseAddUser =()=>{
+      setAddUserModal(false)
+
+    }
+
     return(
     <>
       <Box sx={{ bgcolor:'rgb(100, 112, 111)'}}>  </Box>
@@ -160,7 +160,7 @@ const handleLogout=()=>{
             HRMS
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -169,9 +169,24 @@ const handleLogout=()=>{
               color="inherit"
             > 
             </IconButton>
-          </Box>
+          </Box> */}
+
+          
+{userData.user === 'admin@company.com' ? (
+  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+<Button 
+onClick={handleAddUserClick}
+sx={{ my: 3, color: 'white', display: 'block' }}>
+<Typography textAlign="center">Register User</Typography>
+</Button>
+</Box>
+)
+:
+(  
      
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          
+              
               <Button
                 component={Link}
                 to={'/viewemployee'}
@@ -209,9 +224,15 @@ const handleLogout=()=>{
                     </MenuItem>
                   ))}
 
-              </Menu>     
+              </Menu>  
+              
+
             
+
           </Box>
+
+)}
+
 
           <div>
               
@@ -240,6 +261,12 @@ const handleLogout=()=>{
       </Container>
       
       </AppBar>
+
+
+      <AddUser 
+      open = {addUserModal}
+      handleClose ={handleCloseAddUser}
+      />
       
     </>
     )

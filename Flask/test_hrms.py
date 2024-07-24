@@ -1,6 +1,6 @@
 import unittest
 from hrms import app, db,bcrypt
-from models import Credential,Designation,Employee,Leave
+from models import Credential,Designation,Employee,Leave,UserRole
 from flask import json,session
 
 
@@ -18,12 +18,11 @@ class TestLogin(unittest.TestCase):
 
         self.test_username = 'testuser'
         self.test_password = 'password123'
-        hashed_password = bcrypt.generate_password_hash(self.test_password).decode('utf-8')
-        
 
-        self.test_user = Credential(username=self.test_username,_password =hashed_password)        
+        hashed_password = bcrypt.hashpw(self.test_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        self.test_user = Credential(username=self.test_username,password =hashed_password,role=UserRole.USER)        
         db.session.add(self.test_user)
-        db.session.commit
+        db.session.commit 
 
     def tearDown(self):
         # # db.session.remove()
@@ -45,6 +44,7 @@ class TestLogin(unittest.TestCase):
         # data = response.get_json()
         data = json.loads(response.data.decode('utf-8')) 
         self.assertEqual(data["status_message"],"Login Successful")
+
 
     def test_wrong_password(self):
        response = self.client.post('/login', json={
@@ -602,6 +602,41 @@ class TestRegisterCredentials(unittest.TestCase):
 
 
 
+class TestGetUser(unittest.TestCase):
+    def setUp(self):
+        self.app = app
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+
+        self.client = self.app.test_client()
+        self.app.testing = True
+        db.create_all()
+
+        #test credential
+        password = 'test'
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+        self.test_user = Credential(username='test@company.com', password=hashed_password,role=UserRole.ADMIN)
+        db.session.add(self.test_user)
+        db.session.commit()
+        
+        
+
+
+    def tearDown(self):
+            
+            db.session.remove()
+            db.drop_all()
+
+            # Pop the application context
+            self.app_context.pop()
+
+    def test_get_user_succes(self):
+        response=self.client.get('/user')
+
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(data['status_message'], "Data Send Successfully ")
+
 class TestLogout(unittest.TestCase):
     def setUp(self):
         self.app = app
@@ -614,7 +649,10 @@ class TestLogout(unittest.TestCase):
         db.create_all()
 
         # Create a test user
-        self.test_user = Credential(username='admin@company.com', _password=bcrypt.generate_password_hash('admin').decode('utf-8'))
+        password = 'admin'
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+        self.test_user = Credential(username='admin@company.com', password=hashed_password,role=UserRole.ADMIN)
         db.session.add(self.test_user)
         db.session.commit()
 

@@ -38,6 +38,11 @@
 
   
   password:admin
+
+-Designations can be added from `Admin Tools` in the appbar.
+
+
+-_Atleast one designation should be added before adding user_
   
 
 

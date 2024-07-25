@@ -9,7 +9,8 @@
 - `pip install -r requirements.txt`
 - `flask --app hrms run --debug`
 - _close the flask program using_ `ctrl+c` 
-- _run the file named_ register_admin.py _using the command_
+- _configure the file named_ register_admin.py _with db name,username,password etc_
+- _run the file_
 - `python3 register_admin.py`
 - _now run the flask again_
 - `flask --app hrms run --debug`

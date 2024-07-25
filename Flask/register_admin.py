@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 
+
 # Database connection parameters
 #localhost if its same mechine or the ip or address to server
 server = 'localhost'

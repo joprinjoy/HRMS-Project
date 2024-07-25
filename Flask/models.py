@@ -9,6 +9,11 @@ from sqlalchemy import UniqueConstraint,ForeignKey,create_engine,String,Integer,
 from datetime import datetime,timezone
 from enum import Enum
 
+#db configuration url
+
+dbUrl = 'postgresql://postgres:postgres@localhost:5432/flask_db'
+
+
 class Base(DeclarativeBase):
   def __repr__(self):
     return f"{self.__class__.__name__}(id={self.id})"
@@ -68,7 +73,7 @@ class Credential(Base):
             self._password = password
             self.role = role
 
-def init_db(db_uri='postgresql://postgres:postgres@localhost:5432/flask_db'):
+def init_db(db_uri=dbUrl):
     logger = logging.getLogger("FlaskApp")
     engine = create_engine(db_uri)
     Base.metadata.create_all(engine)

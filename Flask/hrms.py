@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 app.secret_key = 'qwerty'
 
 # configure the SQLite database, relative to the app instance folder
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@localhost:5432/flask_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = dbUrl
 
 # initialize the app with the extension
 db.init_app(app)

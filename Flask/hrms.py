@@ -226,7 +226,7 @@ def editEmployee():
     employee.designation_id = designation.id
     db.session.commit()
     #Permiting the no of days of leave
-    if leaves_taken<designation.leaves_allotted:
+    if leaves_taken<=designation.leaves_allotted:
        leaves.id = leaves_id
        leaves.leave_taken = leaves_taken
        db.session.commit()

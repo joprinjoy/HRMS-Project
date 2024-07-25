@@ -43,7 +43,7 @@ class Employee(Base):
   updated_at :Mapped[datetime] = mapped_column(default=lambda:datetime.now(timezone.utc),onupdate=lambda:datetime.now())
   deleted_at :Mapped[datetime] = mapped_column(nullable=True)
   designation:Mapped["Designation"] =relationship("Designation",back_populates='employee')
-  leave : Mapped["Leave"] = relationship("Leave",back_populates="employees")
+  leave : Mapped["Leave"] = relationship("Leave",back_populates="employees",cascade="all,delete-orphan")
 
 
 class Leave(Base):

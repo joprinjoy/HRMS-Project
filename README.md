@@ -1,7 +1,7 @@
 # HRMS-Project
 
 **Setup and run Flask:-**
-
+-_Configure_ Models.py _with database details to the dbUrl variable_
 - _Flask Running_ on http://127.0.0.1:5000.
 - `requirements.txt` file attched to install all required packages for flask.
 - _navigate to Flask/ and run_
